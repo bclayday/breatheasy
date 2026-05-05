@@ -123,7 +123,7 @@ export default function Pricing() {
                 </span>
               </div>
 
-              <ul className="space-y-3 mb-8">
+              <ul className="space-y-3 mb-4">
                 {plan.features.map((feature, featureIndex) => (
                   <li key={featureIndex} className="flex items-start gap-3">
                     <svg
@@ -169,6 +169,17 @@ export default function Pricing() {
                 ))}
               </ul>
 
+              <div
+                className={`mb-6 p-3 rounded-xl text-xs ${
+                  plan.popular
+                    ? "bg-white/10 text-cyan-100"
+                    : "bg-gray-50 text-gray-600"
+                }`}
+              >
+                <p className="font-medium mb-1">Includes up to 2 HVAC units</p>
+                <p>3 units +$10/mo | 4 units +$15/mo | 5 units +$20/mo | 6+ units: call for quote</p>
+              </div>
+
               <a
                 href="#booking"
                 className={`block w-full py-3 px-6 rounded-full font-semibold text-center transition-all ${
@@ -185,8 +196,6 @@ export default function Pricing() {
 
         <div className="mt-12 text-center animate-on-scroll">
           <p className="text-gray-500 text-sm">
-            Prices shown are per HVAC unit. Multiple unit discounts available.
-            <br />
             All plans include premium MERV-rated filters appropriate for your
             system.
           </p>

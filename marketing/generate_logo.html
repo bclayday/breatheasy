@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+* { margin: 0; padding: 0; }
+body { background: white; width: 800px; height: 400px; display: flex; align-items: center; justify-content: center; }
+</style>
+</head>
+<body>
+<svg width="800" height="400" viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="bgGrad" cx="35%" cy="35%" r="65%">
+      <stop offset="0%" style="stop-color:#29B6F6"/>
+      <stop offset="100%" style="stop-color:#00897B"/>
+    </radialGradient>
+    <linearGradient id="textGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#1565C0"/>
+      <stop offset="100%" style="stop-color:#00695C"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Icon circle -->
+  <circle cx="180" cy="200" r="155" fill="url(#bgGrad)"/>
+
+  <!-- Air flow waves - 3 smooth sine-like waves going right -->
+  <!-- Wave 1 (top) -->
+  <path d="M 105 155 Q 135 120 165 155 Q 195 190 225 155" 
+        fill="none" stroke="white" stroke-width="14" stroke-linecap="round"/>
+  <!-- Wave 2 (middle) -->
+  <path d="M 95 195 Q 130 155 165 195 Q 200 235 235 195" 
+        fill="none" stroke="white" stroke-width="14" stroke-linecap="round" opacity="0.85"/>
+  <!-- Wave 3 (bottom) -->
+  <path d="M 105 235 Q 135 200 165 235 Q 195 270 225 235" 
+        fill="none" stroke="white" stroke-width="14" stroke-linecap="round" opacity="0.65"/>
+
+  <!-- Wordmark -->
+  <text x="365" y="185" 
+        font-family="Arial, Helvetica, sans-serif" 
+        font-size="88" 
+        font-weight="800" 
+        fill="url(#textGrad)"
+        letter-spacing="-2">Breath</text>
+  <text x="365" y="285" 
+        font-family="Arial, Helvetica, sans-serif" 
+        font-size="88" 
+        font-weight="800" 
+        fill="#00897B"
+        letter-spacing="-2">Easy</text>
+
+  <!-- Tagline -->
+  <text x="368" y="320" 
+        font-family="Arial, Helvetica, sans-serif" 
+        font-size="22" 
+        font-weight="400" 
+        fill="#546E7A"
+        letter-spacing="1">Never Think About Your Filters Again</text>
+</svg>
+</body>
+</html>

@@ -434,7 +434,7 @@ export default function BookingForm() {
                   </div>
                   <div>
                     <label htmlFor="hvacUnits" className={labelClasses}>
-                      Number of HVAC Units
+                      Number of HVAC units in your home
                     </label>
                     <select
                       id="hvacUnits"
@@ -446,8 +446,13 @@ export default function BookingForm() {
                       <option value="1">1 unit</option>
                       <option value="2">2 units</option>
                       <option value="3">3 units</option>
-                      <option value="4">4+ units</option>
+                      <option value="4">4 units</option>
+                      <option value="5">5 units</option>
+                      <option value="6+">6+ units</option>
                     </select>
+                    <p className="mt-1 text-xs text-gray-500">
+                      Up to 2 units included. 3rd unit +$10/mo, then +$5/mo per additional unit.
+                    </p>
                   </div>
                   <div className="sm:col-span-2">
                     <label htmlFor="filterSize" className={labelClasses}>
