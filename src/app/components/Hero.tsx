@@ -31,9 +31,13 @@ export default function Hero() {
                 Filters Again
               </span>
             </h1>
-            <p className="text-lg sm:text-xl text-gray-600 mb-8 max-w-xl mx-auto lg:mx-0">
+            <p className="text-lg sm:text-xl text-gray-600 mb-4 max-w-xl mx-auto lg:mx-0">
               Hassle-free air filter delivery and professional installation on
               your schedule. Breathe cleaner air without lifting a finger.
+            </p>
+            <p className="text-xl sm:text-2xl font-semibold text-cyan-700 mb-8 max-w-xl mx-auto lg:mx-0">
+              We don&apos;t just deliver your filter — we install it. You never
+              think about it again.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
               <a
@@ -209,7 +213,7 @@ export default function Hero() {
                       </p>
                     </div>
                   </div>
-                  <span className="font-semibold text-cyan-600">$49/mo</span>
+                  <span className="font-semibold text-cyan-600">$39/mo</span>
                 </div>
               </div>
             </div>

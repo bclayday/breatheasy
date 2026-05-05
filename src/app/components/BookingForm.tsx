@@ -15,21 +15,12 @@ interface FormData {
   filterSize: string;
   schedule: string;
   plan: string;
-  additionalServices: string[];
   notes: string;
 }
 
 interface FormErrors {
   [key: string]: string;
 }
-
-const additionalServicesOptions = [
-  { id: "hvac-tuneup", label: "HVAC Tune-Up (Coming Soon)" },
-  { id: "dryer-vent", label: "Dryer Vent Cleaning (Coming Soon)" },
-  { id: "gutter-cleaning", label: "Gutter Cleaning (Coming Soon)" },
-  { id: "pressure-washing", label: "Pressure Washing (Coming Soon)" },
-  { id: "smoke-detector", label: "Smoke Detector Battery Swap (Coming Soon)" },
-];
 
 const filterSizeOptions = [
   "14x14x1",
@@ -70,7 +61,6 @@ export default function BookingForm() {
     filterSize: "",
     schedule: "",
     plan: "",
-    additionalServices: [],
     notes: "",
   });
 
@@ -155,15 +145,6 @@ export default function BookingForm() {
     }
   };
 
-  const handleCheckboxChange = (serviceId: string) => {
-    setFormData((prev) => ({
-      ...prev,
-      additionalServices: prev.additionalServices.includes(serviceId)
-        ? prev.additionalServices.filter((id) => id !== serviceId)
-        : [...prev.additionalServices, serviceId],
-    }));
-  };
-
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
@@ -204,7 +185,6 @@ export default function BookingForm() {
         filterSize: "",
         schedule: "",
         plan: "",
-        additionalServices: [],
         notes: "",
       });
     } catch {
@@ -539,48 +519,17 @@ export default function BookingForm() {
                       className={inputClasses("plan")}
                     >
                       <option value="">Select plan...</option>
-                      <option value="basic">Basic - $29/mo (Delivery Only)</option>
                       <option value="standard">
-                        Standard - $49/mo (Delivery + Installation)
+                        Standard - $39/mo (Quarterly Installation)
                       </option>
                       <option value="premium">
-                        Premium - $79/mo (Monthly Install + Perks)
+                        Premium - $59/mo (Monthly Install + HVAC Inspection)
                       </option>
                     </select>
                     {errors.plan && (
                       <p className="mt-1 text-sm text-red-500">{errors.plan}</p>
                     )}
                   </div>
-                </div>
-              </div>
-
-              {/* Additional Services */}
-              <div>
-                <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-                  <span className="w-8 h-8 bg-cyan-100 rounded-full flex items-center justify-center text-cyan-600 text-sm font-bold">
-                    5
-                  </span>
-                  Additional Services Interest
-                </h3>
-                <p className="text-sm text-gray-500 mb-4">
-                  Let us know what other services you&apos;re interested in. We&apos;ll
-                  notify you when they become available.
-                </p>
-                <div className="grid sm:grid-cols-2 gap-3">
-                  {additionalServicesOptions.map((service) => (
-                    <label
-                      key={service.id}
-                      className="flex items-center gap-3 p-3 rounded-xl border border-gray-200 hover:border-cyan-200 cursor-pointer transition-all"
-                    >
-                      <input
-                        type="checkbox"
-                        checked={formData.additionalServices.includes(service.id)}
-                        onChange={() => handleCheckboxChange(service.id)}
-                        className="w-5 h-5 rounded border-gray-300 text-cyan-600 focus:ring-cyan-500"
-                      />
-                      <span className="text-sm text-gray-700">{service.label}</span>
-                    </label>
-                  ))}
                 </div>
               </div>
 

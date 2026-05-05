@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BreathEasy Business Card</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: #f0f0f0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    gap: 60px;
+    padding: 40px;
+  }
+
+  .label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: -40px;
+  }
+
+  /* Standard business card: 3.5" x 2" at 300dpi = 1050x600px */
+  .card {
+    width: 1050px;
+    height: 600px;
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* ===== FRONT ===== */
+  .card-front {
+    background: linear-gradient(135deg, #ffffff 0%, #f0f7ff 100%);
+    display: flex;
+    padding: 50px;
+    position: relative;
+  }
+
+  .card-front::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 6px;
+    background: linear-gradient(90deg, #2196F3, #00BCD4, #4CAF50);
+  }
+
+  .card-front .left {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .logo-area {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .logo-icon {
+    width: 56px;
+    height: 56px;
+    background: linear-gradient(135deg, #2196F3, #00BCD4);
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .logo-icon svg {
+    width: 32px;
+    height: 32px;
+    fill: white;
+  }
+
+  .brand-name {
+    font-size: 38px;
+    font-weight: 800;
+    background: linear-gradient(135deg, #1565C0, #00838F);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -1px;
+  }
+
+  .tagline {
+    font-size: 18px;
+    font-weight: 400;
+    color: #5a7a8a;
+    margin-top: 8px;
+    letter-spacing: 0.5px;
+  }
+
+  .services-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 12px;
+  }
+
+  .service-tag {
+    font-size: 14px;
+    font-weight: 500;
+    color: #1976D2;
+    background: rgba(33, 150, 243, 0.08);
+    border: 1px solid rgba(33, 150, 243, 0.15);
+    padding: 5px 12px;
+    border-radius: 20px;
+    letter-spacing: 0.3px;
+  }
+
+  .contact-row {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .contact-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 16px;
+    color: #4a5568;
+    font-weight: 500;
+  }
+
+  .contact-item svg {
+    width: 16px;
+    height: 16px;
+    fill: #2196F3;
+    flex-shrink: 0;
+  }
+
+  .card-front .right {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-left: 40px;
+  }
+
+  .qr-box {
+    width: 180px;
+    height: 180px;
+    background: white;
+    border-radius: 12px;
+    border: 2px solid #e0e8f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+  }
+
+  .qr-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .scan-text {
+    font-size: 13px;
+    font-weight: 600;
+    color: #00838F;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+  }
+
+  .website-url {
+    font-size: 18px;
+    font-weight: 700;
+    color: #1565C0;
+  }
+
+  /* ===== BACK ===== */
+  .card-back {
+    background: linear-gradient(135deg, #1565C0 0%, #00838F 50%, #2E7D32 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 50px;
+    text-align: center;
+    color: white;
+    position: relative;
+  }
+
+  .card-back::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+
+  .back-content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .back-logo {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .back-logo .logo-icon {
+    background: rgba(255,255,255,0.2);
+    backdrop-filter: blur(10px);
+  }
+
+  .back-brand {
+    font-size: 42px;
+    font-weight: 800;
+    color: white;
+    letter-spacing: -1px;
+  }
+
+  .back-tagline {
+    font-size: 22px;
+    font-weight: 300;
+    color: rgba(255,255,255,0.9);
+    letter-spacing: 1px;
+  }
+
+  .divider {
+    width: 60px;
+    height: 2px;
+    background: rgba(255,255,255,0.3);
+    border-radius: 2px;
+  }
+
+  .back-services {
+    font-size: 16px;
+    font-weight: 400;
+    color: rgba(255,255,255,0.75);
+    letter-spacing: 0.5px;
+    line-height: 1.8;
+  }
+
+  .back-location {
+    font-size: 14px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.6);
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-top: 8px;
+  }
+</style>
+</head>
+<body>
+
+<div class="label">FRONT</div>
+<div class="card card-front">
+  <div class="left">
+    <div>
+      <div class="logo-area">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+        </div>
+        <span class="brand-name">BreathEasy</span>
+      </div>
+      <div class="tagline">Never Think About Your Filters Again</div>
+      <div class="services-list">
+        <span class="service-tag">Air Filter Installation</span>
+        <span class="service-tag">HVAC Maintenance</span>
+      </div>
+    </div>
+    <div class="contact-row">
+      <div class="contact-item">
+        <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+        Serving Greater Atlanta
+      </div>
+      <div class="contact-item">
+        <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+        (404) 555-0123
+      </div>
+      <div class="contact-item">
+        <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+        info@breatheasy.ac
+      </div>
+    </div>
+  </div>
+  <div class="right">
+    <div class="qr-box">
+      <img src="qr-code.png" alt="QR Code">
+    </div>
+    <span class="scan-text">Scan to Book</span>
+    <span class="website-url">breatheasy.ac</span>
+  </div>
+</div>
+
+<div class="label">BACK</div>
+<div class="card card-back">
+  <div class="back-content">
+    <div class="back-logo">
+      <div class="logo-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+      </div>
+      <span class="back-brand">BreathEasy</span>
+    </div>
+    <div class="back-tagline">Your Home, Always Maintained</div>
+    <div class="divider"></div>
+    <div class="back-services">
+      Air Filter Delivery & Installation<br>
+      HVAC Tune-Ups & Maintenance<br>
+      Dryer Vent Cleaning • And More
+    </div>
+    <div class="back-location">📍 Greater Atlanta, GA</div>
+  </div>
+</div>
+
+</body>
+</html>

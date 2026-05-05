@@ -2,10 +2,8 @@
 
 const footerLinks = {
   services: [
-    { label: "Air Filter Delivery", href: "#services" },
-    { label: "Filter Installation", href: "#services" },
-    { label: "HVAC Tune-Ups (Coming Soon)", href: "#services" },
-    { label: "Dryer Vent Cleaning (Coming Soon)", href: "#services" },
+    { label: "Air Filter Delivery & Installation", href: "#services" },
+    { label: "HVAC Maintenance & Tune-Ups", href: "#services" },
   ],
   company: [
     { label: "About Us", href: "#why-breatheasy" },

@@ -4,32 +4,16 @@ import { useEffect, useRef } from "react";
 
 const plans = [
   {
-    name: "Basic",
-    price: 29,
-    description: "Perfect for DIY homeowners who just need the filters",
+    name: "Standard",
+    price: 39,
+    description: "Full-service filter delivery and professional installation",
     features: [
       "Premium MERV-rated filters",
-      "Shipped directly to your door",
-      "Choose monthly, bi-monthly, or quarterly",
-      "Free filter sizing consultation",
-      "Easy online account management",
-      "Cancel or pause anytime",
-    ],
-    notIncluded: ["Professional installation", "Priority scheduling"],
-    cta: "Start Basic",
-    popular: false,
-  },
-  {
-    name: "Standard",
-    price: 49,
-    description: "Our most popular plan with full-service installation",
-    features: [
-      "Everything in Basic, plus:",
-      "Professional installation every 3 months",
+      "Filter delivery + professional installation every 3 months",
       "Background-checked technicians",
       "Free filter sizing consultation",
       "Text/email appointment reminders",
-      "Satisfaction guarantee",
+      "Cancel or pause anytime",
     ],
     notIncluded: [],
     cta: "Start Standard",
@@ -37,15 +21,15 @@ const plans = [
   },
   {
     name: "Premium",
-    price: 79,
-    description: "Maximum convenience with monthly service visits",
+    price: 59,
+    description: "Maximum convenience with monthly service and HVAC care",
     features: [
       "Everything in Standard, plus:",
       "Monthly professional installation",
+      "Annual HVAC inspection included",
       "Priority scheduling (same-week visits)",
-      "10% off all add-on services",
-      "Dedicated account manager",
-      "First access to new services",
+      "10% off add-on services",
+      "Satisfaction guarantee",
     ],
     notIncluded: [],
     cta: "Start Premium",
@@ -90,7 +74,7 @@ export default function Pricing() {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8 lg:gap-6">
+        <div className="grid md:grid-cols-2 gap-8 lg:gap-12 max-w-4xl mx-auto">
           {plans.map((plan, index) => (
             <div
               key={plan.name}

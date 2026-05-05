@@ -10,7 +10,7 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "BreathEasy | Home Air Filter Delivery & Installation in Atlanta",
   description:
-    "Never think about your air filters again. BreathEasy delivers and installs HVAC filters on your schedule. Serving the Greater Atlanta Area. Plans starting at $29/month.",
+    "Never think about your air filters again. BreathEasy delivers and installs HVAC filters on your schedule. Serving the Greater Atlanta Area. Plans starting at $39/month.",
   keywords: [
     "air filter delivery",
     "HVAC filter installation",

@@ -16,7 +16,6 @@ interface CustomerSubmission {
   filterSize: string;
   schedule: string;
   plan: string;
-  additionalServices: string[];
   notes: string;
   submittedAt: string;
 }
@@ -123,7 +122,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Validate plan selection
-    const validPlans = ["basic", "standard", "premium"];
+    const validPlans = ["standard", "premium"];
     if (!validPlans.includes(body.plan)) {
       return NextResponse.json(
         { error: "Invalid plan selection" },
@@ -164,9 +163,6 @@ export async function POST(request: NextRequest) {
       filterSize: body.filterSize,
       schedule: body.schedule,
       plan: body.plan,
-      additionalServices: Array.isArray(body.additionalServices)
-        ? body.additionalServices
-        : [],
       notes: body.notes?.trim() || "",
       submittedAt: body.submittedAt || new Date().toISOString(),
     };
