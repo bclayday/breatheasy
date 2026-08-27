@@ -559,7 +559,7 @@ export default function BookingForm() {
                 {submitStatus === "error" && (
                   <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-xl text-red-700 text-sm">
                     Something went wrong. Please try again or call us at (404)
-                    555-0123.
+                    470-5493.
                   </div>
                 )}
                 <button

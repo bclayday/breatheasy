@@ -179,7 +179,7 @@ export default function Footer() {
                   href="tel:+14045550123"
                   className="text-white hover:text-cyan-400 transition-colors"
                 >
-                  (404) 555-0123
+                  (470) 470-5493
                 </a>
               </div>
             </div>

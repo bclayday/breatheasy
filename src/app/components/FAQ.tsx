@@ -26,7 +26,7 @@ const faqs = [
   {
     question: "What if I need to reschedule my service?",
     answer:
-      "Life happens! You can easily reschedule your service through your online account or by calling us at (404) 555-0123. We ask for at least 24 hours notice when possible, but we'll always work with you to find a time that works.",
+      "Life happens! You can easily reschedule your service through your online account or by calling us at (470) 470-5493. We ask for at least 24 hours notice when possible, but we'll always work with you to find a time that works.",
   },
   {
     question: "Can I cancel my subscription anytime?",
@@ -142,7 +142,7 @@ export default function FAQ() {
                 d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
               />
             </svg>
-            Call us at (404) 555-0123
+            Call us at (470) 470-5493
           </a>
         </div>
       </div>

@@ -7,6 +7,7 @@ import BookingForm from "./components/BookingForm";
 import WhyBreathEasy from "./components/WhyBreathEasy";
 import FAQ from "./components/FAQ";
 import Footer from "./components/Footer";
+import ChatWidget from "./components/ChatWidget";
 
 export default function Home() {
   return (
@@ -20,6 +21,7 @@ export default function Home() {
       <WhyBreathEasy />
       <FAQ />
       <Footer />
+      <ChatWidget />
     </main>
   );
 }
