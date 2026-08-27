@@ -81,7 +81,7 @@ export default function Footer() {
                   />
                 </svg>
               </div>
-              <span className="text-xl font-bold text-white">BreathEasy</span>
+              <span className="text-xl font-bold text-white">Breathe Easy</span>
             </a>
             <p className="text-sm text-gray-400 mb-6">
               Making home maintenance effortless, one filter at a time.
@@ -269,7 +269,7 @@ export default function Footer() {
         {/* Bottom Bar */}
         <div className="pt-8 border-t border-gray-800 flex flex-col sm:flex-row justify-between items-center gap-4">
           <p className="text-sm text-gray-500">
-            &copy; {new Date().getFullYear()} BreathEasy. All rights reserved.
+            &copy; {new Date().getFullYear()} Breathe Easy. All rights reserved.
           </p>
           <p className="text-sm text-gray-500">
             Serving the Greater Atlanta Area with pride.

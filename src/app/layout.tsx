@@ -8,9 +8,9 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "BreathEasy | Home Air Filter Delivery & Installation in Atlanta",
+  title: "Breathe Easy | Home Air Filter Delivery & Installation in Atlanta",
   description:
-    "Never think about your air filters again. BreathEasy delivers and installs HVAC filters on your schedule. Serving the Greater Atlanta Area. Plans starting at $39/month.",
+    "Never think about your air filters again. Breathe Easy delivers and installs HVAC filters on your schedule. Serving the Greater Atlanta Area. Plans starting at $39/month.",
   keywords: [
     "air filter delivery",
     "HVAC filter installation",
@@ -19,18 +19,18 @@ export const metadata: Metadata = {
     "filter replacement service",
     "home air quality",
   ],
-  authors: [{ name: "BreathEasy" }],
+  authors: [{ name: "Breathe Easy" }],
   openGraph: {
-    title: "BreathEasy | Home Air Filter Delivery & Installation",
+    title: "Breathe Easy | Home Air Filter Delivery & Installation",
     description:
       "Never think about your air filters again. Hassle-free filter delivery and installation in the Greater Atlanta Area.",
     type: "website",
     locale: "en_US",
-    siteName: "BreathEasy",
+    siteName: "Breathe Easy",
   },
   twitter: {
     card: "summary_large_image",
-    title: "BreathEasy | Home Air Filter Delivery & Installation",
+    title: "Breathe Easy | Home Air Filter Delivery & Installation",
     description:
       "Never think about your air filters again. Hassle-free filter delivery and installation in the Greater Atlanta Area.",
   },

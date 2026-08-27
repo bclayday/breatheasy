@@ -100,7 +100,7 @@ export default function HowItWorks() {
             How It Works
           </h2>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Getting started with BreathEasy takes just minutes. We handle
+            Getting started with Breathe Easy takes just minutes. We handle
             everything so you don&apos;t have to.
           </p>
         </div>

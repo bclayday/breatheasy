@@ -242,7 +242,7 @@ export default function BookingForm() {
                 </svg>
               </div>
               <h3 className="text-2xl font-bold text-gray-900 mb-4">
-                Welcome to BreathEasy!
+                Welcome to Breathe Easy!
               </h3>
               <p className="text-gray-600 mb-8">
                 We&apos;ve received your information and will be in touch within 24

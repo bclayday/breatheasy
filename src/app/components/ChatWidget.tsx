@@ -6,7 +6,7 @@ type Message = { role: "user" | "assistant"; content: string };
 
 const welcome: Message = {
   role: "assistant",
-  content: "Hi! I’m the BreathEasy assistant. Ask me about services, pricing, filter sizes, or getting started.",
+  content: "Hi! I’m the Breathe Easy assistant. Ask me about services, pricing, filter sizes, or getting started.",
 };
 
 export default function ChatWidget() {
@@ -46,11 +46,11 @@ export default function ChatWidget() {
       {open && (
         <section
           className="mb-4 flex h-[min(520px,calc(100vh-110px))] w-[calc(100vw-40px)] max-w-sm flex-col overflow-hidden rounded-3xl border border-cyan-100 bg-white shadow-2xl shadow-cyan-900/20"
-          aria-label="BreathEasy chat"
+          aria-label="Breathe Easy chat"
         >
           <header className="flex items-center justify-between bg-gradient-to-r from-cyan-600 to-emerald-600 px-5 py-4 text-white">
             <div>
-              <p className="font-bold">BreathEasy Assistant</p>
+              <p className="font-bold">Breathe Easy Assistant</p>
               <p className="text-xs text-cyan-50">Here to help</p>
             </div>
             <button onClick={() => setOpen(false)} aria-label="Close chat" className="rounded-full p-1.5 hover:bg-white/15">
@@ -79,7 +79,7 @@ export default function ChatWidget() {
       )}
       <button
         onClick={() => setOpen((value) => !value)}
-        aria-label={open ? "Close BreathEasy chat" : "Open BreathEasy chat"}
+        aria-label={open ? "Close Breathe Easy chat" : "Open Breathe Easy chat"}
         aria-expanded={open}
         className="ml-auto flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-cyan-600 to-emerald-600 text-white shadow-xl shadow-cyan-600/30 transition-transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-cyan-200"
       >

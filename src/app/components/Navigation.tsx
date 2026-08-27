@@ -53,7 +53,7 @@ export default function Navigation() {
                 />
               </svg>
             </div>
-            <span className="text-xl font-bold text-gray-900">BreathEasy</span>
+            <span className="text-xl font-bold text-gray-900">Breathe Easy</span>
           </a>
 
           {/* Desktop Nav */}

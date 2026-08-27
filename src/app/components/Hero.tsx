@@ -120,7 +120,7 @@ export default function Hero() {
                     </svg>
                   </div>
                   <div>
-                    <p className="font-semibold text-gray-900">BreathEasy</p>
+                    <p className="font-semibold text-gray-900">Breathe Easy</p>
                     <p className="text-sm text-gray-500">Filter Subscription</p>
                   </div>
                 </div>
