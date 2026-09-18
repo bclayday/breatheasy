@@ -10,5 +10,5 @@ export const breatheEasySmsConfig: BrandConfig = {
 };
 
 export function missedCallText(config: BrandConfig): string {
-  return `Hi, this is ${config.businessName}—sorry we missed your call! Need a filter swap or have a question? Reply here or book at ${config.bookingUrl}. Reply STOP to opt out.`;
+  return `Hi, this is ${config.businessName}. Sorry we missed your call! Need a filter swap or have a question? Reply here or book at ${config.bookingUrl}. Reply STOP to opt out.`;
 }
