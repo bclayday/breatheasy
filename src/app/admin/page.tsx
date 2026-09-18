@@ -3,10 +3,13 @@
 import { FormEvent, useEffect, useState } from "react";
 
 type Lead = { id: string; type: "Chat" | "Calls"; name: string; phone: string; transcript?: string; createdAt: string };
+type SmsMessage = { id: string; direction: "inbound" | "outbound"; author: "caller" | "ai" | "agent" | "system"; body: string; createdAt: string; deliveryStatus?: string };
+type MissedCallLead = { caller: string; phone: string; startedAt: string; messages: SmsMessage[]; status: "new" | "engaged" | "booked" | "closed"; lastAiReply: string | null; doNotText?: boolean; needsHuman?: boolean };
 type Stats = {
   totalCalls: number; callsByDay: { date: string; count: number }[]; bookings: number; chats: number;
   afterHoursCount: number; topQuestions: { label: string; pct: number }[]; leads: Lead[];
   hoursSaved: number; costPerLead: number; period: string; sampleData: boolean;
+  missedCallLeads: MissedCallLead[];
 };
 
 const colors = ["#0891b2", "#10b981", "#6366f1", "#f59e0b", "#94a3b8"];
@@ -42,11 +45,19 @@ export default function AdminPage() {
   const [passcode, setPasscode] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [selectedPhone, setSelectedPhone] = useState("");
+  const [manualText, setManualText] = useState("");
+  const [sendingText, setSendingText] = useState(false);
+  const [textError, setTextError] = useState("");
 
   async function loadStats(value: string) {
     setLoading(true);
     const response = await fetch("/api/admin/stats", { headers: { Authorization: `Bearer ${value}` }, cache: "no-store" });
-    if (response.ok) { setStats(await response.json()); setToken(value); }
+    if (response.ok) {
+      const data: Stats = await response.json();
+      setStats(data); setToken(value);
+      setSelectedPhone((current) => current || data.missedCallLeads[0]?.phone || "");
+    }
     else { sessionStorage.removeItem("adminToken"); setToken(null); setError("Your session has expired. Please sign in again."); }
     setLoading(false);
   }
@@ -64,6 +75,23 @@ export default function AdminPage() {
     if (!response.ok) { setError("That passcode isn’t correct."); setLoading(false); return; }
     const data = await response.json();
     sessionStorage.setItem("adminToken", data.token); await loadStats(data.token);
+  }
+
+  async function textNow(event: FormEvent) {
+    event.preventDefault();
+    if (!selectedPhone || !manualText.trim()) return;
+    setSendingText(true); setTextError("");
+    const response = await fetch("/api/admin/missed-calls", {
+      method: "POST", headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+      body: JSON.stringify({ phone: selectedPhone, body: manualText.trim() }),
+    });
+    if (!response.ok) {
+      const data = await response.json().catch(() => ({}));
+      setTextError(data.error || "The message could not be sent.");
+    } else {
+      setManualText(""); await loadStats(token!);
+    }
+    setSendingText(false);
   }
 
   if (!token || !stats) return (
@@ -88,6 +116,8 @@ export default function AdminPage() {
   const callShare = stats.totalCalls / activityTotal * 100;
   const chatShare = stats.chats / activityTotal * 100;
   const pipelineValue = stats.bookings * 146;
+  const selectedMissedCall = stats.missedCallLeads.find((lead) => lead.phone === selectedPhone) || stats.missedCallLeads[0];
+  const statusStyle = { new: "bg-sky-100 text-sky-700", engaged: "bg-amber-100 text-amber-700", booked: "bg-emerald-100 text-emerald-700", closed: "bg-slate-100 text-slate-600" };
 
   return (
     <main className="min-h-screen bg-[#f1f7f8] text-slate-900">
@@ -136,6 +166,23 @@ export default function AdminPage() {
           <div className="flex items-center justify-between px-5 py-4"><div><h2 className="text-sm font-bold">Latest leads</h2><p className="mt-1 text-xs text-slate-400">The 20 newest opportunities from calls and chat</p></div><span className="rounded-full bg-cyan-50 px-3 py-1 text-xs font-bold text-cyan-700">{stats.leads.length} leads</span></div>
           <div className="overflow-x-auto"><table className="w-full min-w-[760px] text-left text-xs"><thead><tr className="border-y border-slate-100 bg-slate-50/70 text-[10px] uppercase tracking-wider text-slate-500"><th className="px-5 py-3">When</th><th className="px-3 py-3">Name</th><th className="px-3 py-3">Phone</th><th className="px-3 py-3">Source</th><th className="px-3 py-3">What they wanted</th><th className="px-5 py-3">Status</th></tr></thead>
             <tbody>{stats.leads.length ? stats.leads.map((lead) => <tr key={lead.id} className="border-b border-slate-100 last:border-0"><td className="whitespace-nowrap px-5 py-3 text-slate-500">{formatWhen(lead.createdAt)}</td><td className="px-3 py-3 font-semibold">{lead.name}</td><td className="whitespace-nowrap px-3 py-3 text-slate-600">{phone(lead.phone)}</td><td className="px-3 py-3"><span className={`rounded-full px-2.5 py-1 text-[10px] font-bold ${lead.type === "Calls" ? "bg-sky-100 text-sky-700" : "bg-emerald-100 text-emerald-700"}`}>{lead.type === "Calls" ? "CALL" : "CHAT"}</span></td><td className="max-w-md px-3 py-3 text-slate-600">“{excerpt(lead.transcript)}”</td><td className="px-5 py-3 font-bold text-amber-600">New</td></tr>) : <tr><td colSpan={6} className="px-5 py-10 text-center text-slate-400">New leads will appear here as they arrive.</td></tr>}</tbody></table></div>
+        </section>
+
+        <section className="mb-5 overflow-hidden rounded-2xl border border-[#e2edef] bg-white shadow-sm">
+          <div className="flex flex-col gap-2 px-5 py-4 sm:flex-row sm:items-center sm:justify-between"><div><h2 className="text-sm font-bold">Missed Calls</h2><p className="mt-1 text-xs text-slate-400">SMS recovery conversations and human follow-up</p></div><span className="w-fit rounded-full bg-violet-50 px-3 py-1 text-xs font-bold text-violet-700">{stats.missedCallLeads.length} conversations</span></div>
+          <div className="grid border-t border-slate-100 xl:grid-cols-[1.25fr_1fr]">
+            <div className="overflow-x-auto xl:border-r xl:border-slate-100">
+              <table className="w-full min-w-[650px] text-left text-xs"><thead><tr className="border-b border-slate-100 bg-slate-50/70 text-[10px] uppercase tracking-wider text-slate-500"><th className="px-5 py-3">Started</th><th className="px-3 py-3">Caller</th><th className="px-3 py-3">Status</th><th className="px-3 py-3">Last message</th><th className="px-5 py-3">Follow-up</th></tr></thead>
+                <tbody>{stats.missedCallLeads.length ? stats.missedCallLeads.map((lead) => { const last = lead.messages.at(-1); return <tr key={lead.phone} onClick={() => { setSelectedPhone(lead.phone); setTextError(""); }} className={`cursor-pointer border-b border-slate-100 last:border-0 hover:bg-cyan-50/40 ${selectedMissedCall?.phone === lead.phone ? "bg-cyan-50/60" : ""}`}><td className="whitespace-nowrap px-5 py-3 text-slate-500">{formatWhen(lead.startedAt)}</td><td className="px-3 py-3"><b className="block">{lead.caller || phone(lead.phone)}</b><span className="text-slate-500">{phone(lead.phone)}</span></td><td className="px-3 py-3"><span className={`rounded-full px-2.5 py-1 text-[10px] font-bold uppercase ${statusStyle[lead.status]}`}>{lead.status}</span>{lead.doNotText && <span className="ml-1 text-[10px] font-bold text-rose-600">OPTED OUT</span>}</td><td className="max-w-xs px-3 py-3 text-slate-600">{last ? excerpt(last.body) : "Recovery started"}</td><td className="px-5 py-3">{lead.needsHuman ? <span className="font-bold text-rose-600">Needs human</span> : <span className="text-slate-400">AI active</span>}</td></tr>; }) : <tr><td colSpan={5} className="px-5 py-10 text-center text-slate-400">Missed-call recoveries will appear here.</td></tr>}</tbody>
+              </table>
+            </div>
+            <div className="p-5">
+              {selectedMissedCall ? <><div className="flex items-center justify-between"><div><h3 className="text-sm font-bold">Conversation with {phone(selectedMissedCall.phone)}</h3><p className="mt-1 text-[11px] text-slate-400">Click another row to view its history</p></div></div>
+                <div className="mt-4 max-h-72 space-y-2 overflow-y-auto rounded-xl bg-slate-50 p-3">{selectedMissedCall.messages.map((item) => <div key={item.id} className={`flex ${item.direction === "outbound" ? "justify-end" : "justify-start"}`}><div className={`max-w-[85%] rounded-2xl px-3 py-2 ${item.direction === "outbound" ? "bg-cyan-700 text-white" : "border border-slate-200 bg-white text-slate-700"}`}><p className="whitespace-pre-wrap text-xs leading-5">{item.body}</p><p className={`mt-1 text-[9px] ${item.direction === "outbound" ? "text-cyan-100" : "text-slate-400"}`}>{item.author} · {formatWhen(item.createdAt)}{item.deliveryStatus ? ` · ${item.deliveryStatus}` : ""}</p></div></div>)}</div>
+                <form onSubmit={textNow} className="mt-4"><label htmlFor="manual-text" className="text-xs font-bold text-slate-700">Text now</label><textarea id="manual-text" rows={3} maxLength={1000} disabled={selectedMissedCall.doNotText} value={manualText} onChange={(event) => setManualText(event.target.value)} placeholder={selectedMissedCall.doNotText ? "Caller has opted out" : "Write a personal follow-up…"} className="mt-2 w-full resize-none rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs outline-none focus:border-cyan-500 focus:ring-4 focus:ring-cyan-100 disabled:bg-slate-100" />{textError && <p className="mt-1 text-xs text-rose-600">{textError}</p>}<button disabled={sendingText || selectedMissedCall.doNotText || !manualText.trim()} className="mt-2 rounded-lg bg-cyan-700 px-4 py-2 text-xs font-bold text-white disabled:opacity-50">{sendingText ? "Sending…" : "Send text"}</button></form>
+              </> : <div className="flex min-h-52 items-center justify-center text-xs text-slate-400">Select a conversation to see its message history.</div>}
+            </div>
+          </div>
         </section>
 
         <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">

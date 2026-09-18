@@ -3,6 +3,7 @@ import path from "path";
 import { isAuthorized } from "@/lib/admin-auth";
 import type { Lead } from "@/lib/leads";
 import type { Question } from "@/lib/questions";
+import { recoveryStore } from "@/lib/sms-recovery";
 
 export const dynamic = "force-dynamic";
 
@@ -67,8 +68,8 @@ export async function GET(request: Request) {
   if (!isAuthorized(request)) return Response.json({ error: "Unauthorized" }, { status: 401 });
 
   const now = new Date();
-  const [calls, leadData, questionData] = await Promise.all([
-    getCalls(), readJson("leads.json", { leads: [] }), readJson("questions.json", []),
+  const [calls, leadData, questionData, missedCallLeads] = await Promise.all([
+    getCalls(), readJson("leads.json", { leads: [] }), readJson("questions.json", []), recoveryStore.list(),
   ]);
   const leads: Lead[] = (Array.isArray(leadData) ? leadData : leadData.leads || []).sort((a: Lead, b: Lead) => Date.parse(b.createdAt) - Date.parse(a.createdAt));
   const questions: Question[] = Array.isArray(questionData) ? questionData : questionData.questions || [];
@@ -100,5 +101,6 @@ export async function GET(request: Request) {
     costPerLead: Number((bookings ? estimatedSpend / bookings : estimatedSpend).toFixed(2)),
     period: new Intl.DateTimeFormat("en-US", { month: "long", year: "numeric", timeZone: "America/New_York" }).format(now),
     sampleData: questions.length === 0,
+    missedCallLeads,
   });
 }
