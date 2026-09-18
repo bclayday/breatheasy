@@ -6,6 +6,18 @@ import type { MissedCallLead, RecoveryStore } from "./types";
 
 type StoreData = { leads: MissedCallLead[] };
 
+// Vercel's serverless filesystem is read-only: disk writes throw. Keep an
+// instance-local overlay so recovery still works on serverless (rate guards
+// and conversations survive within a warm instance) and persist to disk
+// best-effort for local dev. Swap in Upstash/Airtable for durable prod storage.
+const memoryLeads = new Map<string, MissedCallLead>();
+
+function mergeLeads(fileLeads: MissedCallLead[]): MissedCallLead[] {
+  const merged = new Map(fileLeads.map((lead) => [normalizePhone(lead.phone), lead]));
+  for (const [phone, lead] of memoryLeads) merged.set(phone, lead);
+  return [...merged.values()];
+}
+
 function normalizePhone(value: string): string {
   const digits = value.replace(/\D/g, "");
   return digits.length === 10 ? `+1${digits}` : digits ? `+${digits}` : value.trim();
@@ -19,9 +31,10 @@ export class JsonRecoveryStore implements RecoveryStore {
   private async read(): Promise<StoreData> {
     try {
       const data = JSON.parse(await fs.readFile(this.file, "utf8"));
-      return { leads: Array.isArray(data) ? data : Array.isArray(data.leads) ? data.leads : [] };
+      const fileLeads = Array.isArray(data) ? data : Array.isArray(data.leads) ? data.leads : [];
+      return { leads: mergeLeads(fileLeads) };
     } catch {
-      return { leads: [] };
+      return { leads: mergeLeads([]) };
     }
   }
 
@@ -42,9 +55,14 @@ export class JsonRecoveryStore implements RecoveryStore {
       const index = data.leads.findIndex((lead) => normalizePhone(lead.phone) === normalized);
       const updated = mutate(index >= 0 ? structuredClone(data.leads[index]) : undefined);
       updated.phone = normalized;
+      memoryLeads.set(normalized, updated);
       if (index >= 0) data.leads[index] = updated; else data.leads.push(updated);
-      await fs.mkdir(path.dirname(this.file), { recursive: true });
-      await fs.writeFile(this.file, JSON.stringify(data, null, 2));
+      try {
+        await fs.mkdir(path.dirname(this.file), { recursive: true });
+        await fs.writeFile(this.file, JSON.stringify(data, null, 2));
+      } catch {
+        // Read-only filesystem (serverless): memory overlay already has the update.
+      }
       return updated;
     });
     this.queue = operation.catch(() => undefined);
@@ -59,7 +77,10 @@ export class JsonRecoveryStore implements RecoveryStore {
         const message = lead.messages.find((item) => item.twilioSid === sid);
         if (message) { message.deliveryStatus = status; changed = true; }
       }
-      if (changed) await fs.writeFile(this.file, JSON.stringify(data, null, 2));
+      if (changed) {
+        try { await fs.writeFile(this.file, JSON.stringify(data, null, 2)); }
+        catch { /* serverless: memory overlay is authoritative */ }
+      }
     });
     this.queue = operation.catch(() => undefined);
     await operation;
