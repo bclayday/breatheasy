@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useEffect, useState } from "react";
+import OpsPanel from "./OpsPanel";
 
 type Lead = { id: string; type: "Chat" | "Calls"; name: string; phone: string; transcript?: string; createdAt: string };
 type SmsMessage = { id: string; direction: "inbound" | "outbound"; author: "caller" | "ai" | "agent" | "system"; body: string; createdAt: string; deliveryStatus?: string };
@@ -49,6 +50,7 @@ export default function AdminPage() {
   const [manualText, setManualText] = useState("");
   const [sendingText, setSendingText] = useState(false);
   const [textError, setTextError] = useState("");
+  const [tab, setTab] = useState<"inbox" | "ops">("inbox");
 
   async function loadStats(value: string) {
     setLoading(true);
@@ -127,8 +129,18 @@ export default function AdminPage() {
             <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-cyan-600 to-emerald-500 text-white shadow-md shadow-cyan-800/15"><LeafIcon /></div>
             <div><h1 className="text-xl font-extrabold tracking-tight sm:text-2xl">Breathe Easy <span className="font-normal text-slate-500">| Owner Dashboard</span></h1><p className="mt-0.5 text-xs text-slate-500">AI receptionist, chat, and lead pipeline at a glance</p></div>
           </div>
-          <div className="flex items-center gap-2"><span className="rounded-full border border-emerald-200 bg-emerald-50 px-3 py-2 text-xs font-bold text-emerald-700"><span className="mr-1.5 text-emerald-500">●</span>All systems live</span><span className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700">{stats.period}</span></div>
+          <div className="flex items-center gap-2">
+            <div className="flex rounded-full border border-slate-200 bg-white p-1 shadow-sm">
+              <button onClick={() => setTab("inbox")} className={`rounded-full px-4 py-1.5 text-xs font-bold transition ${tab === "inbox" ? "bg-gradient-to-r from-cyan-600 to-emerald-600 text-white" : "text-slate-500 hover:text-slate-900"}`}>Inbox</button>
+              <button onClick={() => setTab("ops")} className={`rounded-full px-4 py-1.5 text-xs font-bold transition ${tab === "ops" ? "bg-gradient-to-r from-cyan-600 to-emerald-600 text-white" : "text-slate-500 hover:text-slate-900"}`}>Operations</button>
+            </div>
+            <span className="rounded-full border border-emerald-200 bg-emerald-50 px-3 py-2 text-xs font-bold text-emerald-700"><span className="mr-1.5 text-emerald-500">●</span>All systems live</span><span className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700">{stats.period}</span></div>
         </header>
+
+        {tab === "ops" ? (
+          <OpsPanel token={token} />
+        ) : (
+        <>
 
         <section className="mb-5 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
           {[
@@ -195,6 +207,8 @@ export default function AdminPage() {
         </section>
 
         <footer className="mt-6 flex flex-col gap-2 border-t border-slate-200 pt-4 text-[11px] text-slate-400 sm:flex-row sm:justify-between"><span>Live owner analytics · Refresh the page for current totals</span><span>AI operations: Atlantis AI Solutions</span></footer>
+        </>
+        )}
       </div>
     </main>
   );
