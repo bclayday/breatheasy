@@ -77,7 +77,7 @@ export async function GET(req: Request) {
   const now = Date.now();
 
   for (const [phone, { firstContact }] of contacts) {
-    if (phone.length < 10) continue;
+    if (phone.length < 10 || phone === BREATH_NUMBER) continue;
     const theirMsgs = allMsgs
       .filter((m) => m.from === phone)
       .sort((a, b) => +new Date(a.date_created) - +new Date(b.date_created));
