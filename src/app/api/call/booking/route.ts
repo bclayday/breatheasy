@@ -1,6 +1,6 @@
 import { isExitIntent } from "@/lib/breatheasy";
 import { saveLead } from "@/lib/leads";
-import { gather, twiml, xml } from "@/lib/twiml";
+import { gather, say, twiml } from "@/lib/twiml";
 
 export const dynamic = "force-dynamic";
 
@@ -32,9 +32,9 @@ export async function POST(request: Request) {
   const form = await request.formData();
   const callerFrom = String(form.get("From") || "");
   const speech = String(form.get("SpeechResult") || "").trim();
-  if (isExitIntent(speech)) return twiml("<Say>See you, breathe easy!</Say><Hangup/>");
-  if (!speech) return twiml(gather(stage === "name" ? "Please say your full name." : "Please say your phone number.", request.url));
-  if (stage === "name") return twiml(gather("Thanks. What is the best phone number to reach you?", `/api/call/booking?stage=phone&name=${encodeURIComponent(speech)}`));
+  if (isExitIntent(speech)) return twiml(`${say("You got it. Take care, and breathe easy!")}<Hangup/>`);
+  if (!speech) return twiml(gather(stage === "name" ? "Sorry, I didn't catch that. Just say your full name for me." : "Sorry, I missed that. What's the best phone number to reach you?", request.url));
+  if (stage === "name") return twiml(gather(`Perfect, thanks ${speech}! <break time="200ms"/> And what's the best phone number to reach you?`, `/api/call/booking?stage=phone&name=${encodeURIComponent(speech)}`));
   const name = url.searchParams.get("name") || "Caller";
   await saveLead({ type: "Calls", name, phone: speech, transcript: `Booking call from ${name}` });
 
@@ -42,5 +42,5 @@ export async function POST(request: Request) {
   const target = digitsOf(speech) || callerFrom;
   sendConfirmSms(target, name); // fire and forget
 
-  return twiml(`<Say>${xml(`Thanks, ${name}. Our team will confirm your service details and schedule soon. We just texted you a confirmation. See you, breathe easy!`)}</Say><Hangup/>`);
+  return twiml(`${say(`Awesome, you're all set, ${name}! Our team will reach out to lock in your visit, and we just sent you a text. Thanks for calling Breathe Easy, and you guessed it, breathe easy!`)}<Hangup/>`);
 }
