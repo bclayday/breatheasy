@@ -42,10 +42,16 @@ const filterSizeOptions = [
   "Not sure - measure for me (free)",
 ];
 
+const STRIPE_LINKS: Record<string, string> = {
+  standard: "https://buy.stripe.com/bJe4gz8fC3Ia2dq5bK73G00",
+  premium: "https://buy.stripe.com/bJe14nanK2E62dqaw473G01",
+};
+
 export default function BookingForm() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle");
+  const [submittedPlan, setSubmittedPlan] = useState<"standard" | "premium" | null>(null);
   const [errors, setErrors] = useState<FormErrors>({});
 
   const [formData, setFormData] = useState<FormData>({
@@ -171,6 +177,9 @@ export default function BookingForm() {
         throw new Error("Failed to submit form");
       }
 
+      setSubmittedPlan(
+        formData.plan.toLowerCase().includes("premium") ? "premium" : "standard"
+      );
       setSubmitStatus("success");
       setFormData({
         name: "",
@@ -244,11 +253,29 @@ export default function BookingForm() {
               <h3 className="text-2xl font-bold text-gray-900 mb-4">
                 Welcome to Breathe Easy!
               </h3>
-              <p className="text-gray-600 mb-8">
+              <p className="text-gray-600 mb-6">
                 We&apos;ve received your information and will be in touch within 24
                 hours to confirm your service details and schedule your first
                 visit.
               </p>
+              {submittedPlan && STRIPE_LINKS[submittedPlan] && (
+                <div className="mb-8">
+                  <p className="text-sm text-gray-500 mb-3">
+                    Want to skip the wait? Start your {submittedPlan === "premium" ? "Premium" : "Standard"} subscription now:
+                  </p>
+                  <a
+                    href={STRIPE_LINKS[submittedPlan]}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-block px-8 py-3 rounded-full font-semibold bg-gradient-to-r from-cyan-600 to-emerald-600 text-white hover:from-cyan-700 hover:to-emerald-700 shadow-lg shadow-cyan-500/25 transition-all"
+                  >
+                    Pay {submittedPlan === "premium" ? "$59" : "$39"}/mo now
+                  </a>
+                  <p className="mt-2 text-xs text-gray-400">
+                    Secure checkout powered by Stripe. Cancel anytime.
+                  </p>
+                </div>
+              )}
               <button
                 onClick={() => setSubmitStatus("idle")}
                 className="text-cyan-600 font-medium hover:text-cyan-700 transition-colors"

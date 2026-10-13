@@ -2,6 +2,11 @@
 
 import { useEffect, useRef } from "react";
 
+const STRIPE_STANDARD =
+  "https://buy.stripe.com/bJe4gz8fC3Ia2dq5bK73G00";
+const STRIPE_PREMIUM =
+  "https://buy.stripe.com/bJe14nanK2E62dqaw473G01";
+
 const plans = [
   {
     name: "Standard",
@@ -17,6 +22,7 @@ const plans = [
     ],
     notIncluded: [],
     cta: "Start Standard",
+    checkoutUrl: STRIPE_STANDARD,
     popular: true,
   },
   {
@@ -33,6 +39,7 @@ const plans = [
     ],
     notIncluded: [],
     cta: "Start Premium",
+    checkoutUrl: STRIPE_PREMIUM,
     popular: false,
   },
 ];
@@ -181,7 +188,9 @@ export default function Pricing() {
               </div>
 
               <a
-                href="#booking"
+                href={plan.checkoutUrl}
+                target="_blank"
+                rel="noopener noreferrer"
                 className={`block w-full py-3 px-6 rounded-full font-semibold text-center transition-all ${
                   plan.popular
                     ? "bg-white text-cyan-600 hover:bg-gray-100 shadow-lg"
@@ -190,6 +199,13 @@ export default function Pricing() {
               >
                 {plan.cta}
               </a>
+              <p
+                className={`mt-3 text-center text-xs ${
+                  plan.popular ? "text-cyan-100" : "text-gray-400"
+                }`}
+              >
+                Secure checkout powered by Stripe. Cancel anytime.
+              </p>
             </div>
           ))}
         </div>
